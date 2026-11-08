@@ -1,8 +1,23 @@
 # photo-upscale-kit
 
-给低分辨率 / 低质量照片做放大与修复的一套脚本，跑在 **Windows + WSL2 + NVIDIA GPU** 上。
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Python](https://img.shields.io/badge/Python-3.10%2B-blue.svg?logo=python&logoColor=white)](https://www.python.org/)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%2B%20WSL2-lightgrey.svg?logo=windows&logoColor=white)](#环境要求)
+[![CUDA](https://img.shields.io/badge/CUDA-11.8%2B-76B900.svg?logo=nvidia&logoColor=white)](https://developer.nvidia.com/cuda-toolkit)
+[![PyTorch](https://img.shields.io/badge/PyTorch-2.0%2B-EE4C2C.svg?logo=pytorch&logoColor=white)](https://pytorch.org/)
+[![Real-ESRGAN](https://img.shields.io/badge/Real--ESRGAN-x4-4B8BBE.svg)](https://github.com/xinntao/Real-ESRGAN)
+[![Stable Diffusion](https://img.shields.io/badge/Stable%20Diffusion-1.5-8957e5.svg)](https://huggingface.co/runwayml/stable-diffusion-v1-5)
+[![ControlNet](https://img.shields.io/badge/ControlNet-Tile-ff6b6b.svg)](https://huggingface.co/lllyasviel/ControlNet-v1-1)
+[![OpenCV](https://img.shields.io/badge/OpenCV-4.8%2B-5C3EE8.svg?logo=opencv&logoColor=white)](https://opencv.org/)
+[![GitHub stars](https://img.shields.io/github/stars/Alexander390370/photo-upscale-kit?style=social)](https://github.com/Alexander390370/photo-upscale-kit/stargazers)
+[![GitHub last commit](https://img.shields.io/github/last-commit/Alexander390370/photo-upscale-kit)](https://github.com/Alexander390370/photo-upscale-kit/commits/main)
+[![GitHub repo size](https://img.shields.io/github/repo-size/Alexander390370/photo-upscale-kit)](https://github.com/Alexander390370/photo-upscale-kit)
+
+**自动判断该超分还是重绘**——给低分辨率 / 低质量照片做放大与修复，跑在 **Windows + WSL2 + NVIDIA GPU** 上。
 
 核心思路：**不同的图该走不同的路**，硬套一种方法只会越弄越糟。仓库自带一个分类器，测量图片特征后自动选方案。
+
+> ⚠️ **一句话结论**：边缘密度 < 0.01 的平滑虚焦图**不要重绘**，模型会凭空补出假纹理，越弄越糊。
 
 ## 三条路，别混着用
 
