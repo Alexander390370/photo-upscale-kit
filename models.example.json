@@ -1,0 +1,6 @@
+{
+  "_说明": "把这三个路径改成你机器上的实际位置。~ 代表家目录。留空则用代码里的默认值。",
+  "upscale": "~/ComfyUI/models/upscale_models/RealESRGAN_x4plus_anime_6B.pth",
+  "sd": "~/stable-diffusion-webui-forge/models/Stable-diffusion/Realistic_Vision_V5.1.safetensors",
+  "controlnet": "~/stable-diffusion-webui-forge/models/ControlNet/control_v11f1e_sd15_tile.pth"
+}

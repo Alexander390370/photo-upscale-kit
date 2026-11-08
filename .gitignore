@@ -1,0 +1,32 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# 输出
+*_upscaled.png
+*_redrawn.png
+*_full.png
+*_up.png
+*_denoised.png
+*_对比.png
+output/
+outputs/
+
+# 模型权重（太大，不放仓库）
+*.pth
+*.safetensors
+*.ckpt
+*.pt
+
+# 本机配置
+models.json
+
+# 编辑器 / 系统
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+desktop.ini
