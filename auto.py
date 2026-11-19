@@ -78,13 +78,19 @@ def do_upscale(src: Path, out: Path, scale: float = 4) -> int:
 
 
 def do_redraw(src: Path, out: Path, denoise: float = 0.35, scale: float = 4,
-              pre_denoise: float = 1.2) -> int:
-    return run([PY, str(HERE / "redraw.py"), str(src), str(out),
-                "--model", str(MODELS["sd"]), "--controlnet", str(MODELS["controlnet"]),
-                "--cn-scale", "1.0", "--scale", str(scale), "--denoise", str(denoise),
-                "--pre-denoise", str(pre_denoise), "--tile", "512", "--overlap", "128",
-                "--steps", "28", "--guidance", "4.5",
-                "--prompt", PROMPT, "--negative", NEGATIVE])
+              pre_denoise: float = 1.2, skip_upscale: bool = False) -> int:
+    cmd = [PY, str(HERE / "redraw.py"), str(src), str(out),
+           "--model", str(MODELS["sd"]), "--controlnet", str(MODELS["controlnet"]),
+           "--cn-scale", "1.0", "--denoise", str(denoise),
+           "--pre-denoise", str(pre_denoise), "--tile", "512", "--overlap", "128",
+           "--steps", "28", "--guidance", "4.5",
+           "--prompt", PROMPT, "--negative", NEGATIVE]
+    # redraw_only 必须跳过超分，否则会白白放大 4 倍
+    if skip_upscale:
+        cmd.append("--skip-upscale")
+    else:
+        cmd += ["--scale", str(scale)]
+    return run(cmd)
 
 
 def process(path: Path, outdir: Path, force: str | None, dry: bool) -> bool:
@@ -112,11 +118,13 @@ def process(path: Path, outdir: Path, force: str | None, dry: bool) -> bool:
         out = outdir / f"{stem}_upscaled.png"
         ok = do_upscale(path, out) == 0
     elif advice == "redraw_only":
+        # 只重绘：不放大，保持原尺寸
         out = outdir / f"{stem}_redrawn.png"
-        ok = do_redraw(path, out) == 0
+        ok = do_redraw(path, out, skip_upscale=True) == 0
     else:  # upscale_then_redraw
+        # 先超分再重绘：放大 4 倍
         out = outdir / f"{stem}_full.png"
-        ok = do_redraw(path, out) == 0
+        ok = do_redraw(path, out, scale=4) == 0
 
     if ok:
         print(f"✅ 完成: {out}  ({out.stat().st_size / 1024:.0f} KB)")
